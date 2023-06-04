@@ -10,7 +10,7 @@ from .models import Book
 def books(request):
     if request.method=="GET":
         books = Book.objects.all().values()
-        return JsonResponse({'books': list(books)})
+        return JsonResponse(list(books), safe=False)
     elif request.method=="POST":
         title = request.POST.get('title')
         author = request.POST.get('author')
