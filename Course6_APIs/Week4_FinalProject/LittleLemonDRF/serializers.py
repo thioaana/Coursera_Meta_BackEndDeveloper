@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, MenuItem
+from .models import Category, MenuItem, Cart
 
 class CategorySerializer (serializers.ModelSerializer):
     class Meta:
@@ -16,6 +16,6 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CartSerializer
+        model = Cart
         fields = ('user', 'menu_item', 'quantity', 'unit_price', 'price')
         read_only_fields = ('user', 'unit price', 'price')
