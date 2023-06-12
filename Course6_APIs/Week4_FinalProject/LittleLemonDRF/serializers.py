@@ -1,4 +1,7 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
+from rest_framework.validators import UniqueTogetherValidator
+
 
 from .models import Category, MenuItem, Cart
 
@@ -15,8 +18,12 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'price', 'stock', 'category', 'category_id')
 
 class CartSerializer(serializers.ModelSerializer):
-    # price = serializers.SerializerMethodField('calculate_price')
+    # company_name = serializers.CharField(read_only=True, source='company.company_name')
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
+                                              default=serializers.CurrentUserDefault(),)
     class Meta:
         model = Cart
         fields = ('user', 'menu_item', 'quantity', 'unit_price', 'price')
-        read_only_fields = ('user',  'price', 'unit_price')
+        read_only_fields = ('user', 'unit price', 'price')
+        validators = [UniqueTogetherValidator(queryset=Cart.objects.all(),
+                                            fields=['user', 'menu_item'])]
