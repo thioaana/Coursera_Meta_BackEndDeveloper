@@ -53,13 +53,18 @@ class MenuItemsSingleView(generics.RetrieveUpdateDestroyAPIView):
         return super(MenuItemsSingleView, self).get_permissions()
     
     
-
 # CART VIEWS
 class CartView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    
+        
     def get_permissions(self):
         if self.request.method == "POST":
             self.permission_classes = [IsCustomer]
         return super(CartView, self).get_permissions()
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #     return super(CartView, self).form_valid(form)

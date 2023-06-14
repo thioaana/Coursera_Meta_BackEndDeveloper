@@ -18,12 +18,12 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'price', 'stock', 'category', 'category_id')
 
 class CartSerializer(serializers.ModelSerializer):
-    # company_name = serializers.CharField(read_only=True, source='company.company_name')
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
+    user = serializers.PrimaryKeyRelatedField(read_only=True,
                                               default=serializers.CurrentUserDefault(),)
+    # menu_item = serializers.StringRelatedField()
     class Meta:
         model = Cart
         fields = ('user', 'menu_item', 'quantity', 'unit_price', 'price')
-        read_only_fields = ('user', 'unit price', 'price')
+        read_only_fields = ('unit price', 'price')
         validators = [UniqueTogetherValidator(queryset=Cart.objects.all(),
                                             fields=['user', 'menu_item'])]
