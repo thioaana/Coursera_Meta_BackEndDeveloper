@@ -1,0 +1,4 @@
+admin:mah112 - 132354f62231d12d9aae7d17131acf2c2fdacc54
+Customer1:Customer1Password - 62d2ab6e8eb64562091070f2e76c726103386650
+Manager1:Manager1Password - 234188eb504e3ca9e939a0adb8312d5fe013e86b
+Delivery1:Delivery1Password - 08b0205e6b93ed384b0e16fb92302d3aef7157b7

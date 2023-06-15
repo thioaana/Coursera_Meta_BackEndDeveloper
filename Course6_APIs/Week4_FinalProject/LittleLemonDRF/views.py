@@ -1,10 +1,33 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User, Group
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+
+
 
 from .models import Category, MenuItem, Cart
 from .permissions import IsManager, IsDeliveryCrew, IsSuperUser, IsCustomer
 from .serializers import CategorySerializer, MenuItemSerializer, CartSerializer
+
+
+# MANAGER VIEWS - Handling Manager Group by the admin
+@api_view(['POST', 'DELETE'])
+@permission_classes([IsSuperUser])
+def managers(request):
+    username = request.data['username']
+    if username:
+        user = get_object_or_404(User, username=username)
+        managers = Group.objects.get(name='Manager')
+        if request.method =='POST':
+            managers.user_set.add(user)
+        if request.method =='DELETE':
+            managers.user_set.remove(user)
+        return Response({"mesage": "ok"})
+    return Response({'message': "error"}, status.HTTP_400_BAD_REQUEST)
+
 
 
 # CATEGORY VIEWS
@@ -63,8 +86,8 @@ class CartView(generics.ListCreateAPIView):
             self.permission_classes = [IsCustomer]
         return super(CartView, self).get_permissions()
     
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
     # def form_valid(self, form):
     #     form.instance.user = self.request.user
     #     return super(CartView, self).form_valid(form)

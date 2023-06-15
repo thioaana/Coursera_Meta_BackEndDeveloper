@@ -20,7 +20,6 @@ class MenuItemSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True,
                                               default=serializers.CurrentUserDefault(),)
-    # menu_item = serializers.StringRelatedField()
     class Meta:
         model = Cart
         fields = ('user', 'menu_item', 'quantity', 'unit_price', 'price')
